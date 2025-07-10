@@ -2,6 +2,7 @@
 
 # Create a directory for the output if do not exist
 mkdir -p output
+mkdir -p logs # for /logs history.txt
 
 # Set current date
 current_date=$(date +%Y%m%d_%H%M%S)
@@ -44,4 +45,7 @@ exec > output/$output_file 2>&1
 greetings
 echo "Current date and time: $current_date"
 echo "Number of files: $(count_files)"
+
+# append to logs/history
+echo "$current_date $output_file" >> logs/history.txt
 
