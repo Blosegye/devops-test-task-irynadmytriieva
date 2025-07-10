@@ -1,0 +1,71 @@
+name: A GitHub Actions Workflow 
+run-name: ${{ github.actor }} is running a workflow
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      preferable_log_file_name:
+        description: 'A filename for the output file'
+        required: false
+        default: '' 
+
+jobs:
+  task-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Running hello.sh for Task 2
+        run: |
+          chmod +x scripts/hello.sh
+          bash scripts/hello.sh "${{ inputs.preferable_log_file_name }}"
+       
+
+      - name: Testing the output for hello.sh
+        run: |
+          echo "1. Validating the output file creation: "
+          if [ -f output/${{ env.LOG_FILE }} ]; then
+            echo "-- File exists! ${{ env.LOG_FILE }}"
+          else
+            echo "-- File is not found! ${{ env.LOG_FILE }}"
+          fi
+
+          echo "2. Validating the output file to have "Hello from Bash!": "
+          if grep -q "Hello from Bash!" output/${{ env.LOG_FILE }}; then
+            echo "-- Found the expected string in output."
+          else
+            echo "-- String not found in output."
+          fi
+
+          echo "3. Validating the output file to have a valid timestamp -- YYYYMMDD_HHMMSS: "
+          if grep -Eq '[0-9]{8}_[0-9]{6}' output/${{ env.LOG_FILE }}; then
+            echo "-- Timestamp is valid in the output file."
+          else
+            echo "-- Timestamp is not valid in the output file."
+          fi
+
+          echo "4. Validating the value for file count to be numeric: "
+          if [[ "$LOG_FILE_COUNT" =~ ^[0-9]+$ ]]; then
+            echo "-- File count is numeric."
+          else
+            echo "-- File count is NOT numeric!"
+          fi
+
+
+      - name: Upload log file as a CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-artifact-log-file
+          path: ./output/${{ env.LOG_FILE }}
+      
+
+
+
+
