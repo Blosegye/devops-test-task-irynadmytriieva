@@ -17,3 +17,5 @@ In order to trigger the GitHub Actions workflow manually.
 4. Press the “Run workflow” button (top right) upon openning
 5. Add or leave the "A filename for the output file" field
 -------------
+[![A GitHub Actions Workflow]
+(https://github.com/Blosegye/devops-test-task-irynadmytriieva/actions/workflows/run-script.yml/badge.svg?branch=main)](https://github.com/Blosegye/devops-test-task-irynadmytriieva/actions/workflows/run-script.yml)
